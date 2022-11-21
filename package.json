@@ -1,5 +1,5 @@
 {
-  "name": "widback-feedback-widget",
+  "name": "onlyfeedbacks",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -12,7 +12,11 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
+  "dependencies": {
+    "@changesets/cli": "^2.25.2"
+  },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "eslint-config-custom": "*",
     "prettier": "latest",
     "turbo": "latest"
@@ -20,6 +24,10 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {},
-  "packageManager": "npm@8.19.2"
+  "packageManager": "npm@8.19.2",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
