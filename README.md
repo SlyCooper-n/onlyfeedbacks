@@ -1,73 +1,118 @@
-# Turborepo starter
+<div align="center">
 
-This is an official npm starter turborepo.
+# OnlyFeedbacks
 
-## What's inside?
+[![Github](https://img.shields.io/badge/Gabe%20Frasz-OnlyFeedbacks-gold?style=flat-square)](https://github.com/SlyCooper-n)
+[![Github issues](https://img.shields.io/github/issues/SlyCooper-n/onlyfeedbacks?color=red&style=flat-square)](https://github.com/SlyCooper-n/onlyfeedbacks/issues)
+[![GitHub license](https://img.shields.io/github/license/SlyCooper-n/onlyfeedbacks?color=green&style=flat-square)](https://github.com/SlyCooper-n/onlyfeedbacks/blob/main/LICENSE)
+![Github commit](https://img.shields.io/github/last-commit/SlyCooper-n/onlyfeedbacks?color=blue&style=flat-square)
+[![Github](https://img.shields.io/badge/-Rockeseat-purple?style=flat-square)](https://github.com/Rocketseat)
 
-This turborepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
+</div>
 
-### Apps and Packages
+<br />
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+> Project built together with Rockeseat
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+<div align="center"><img alt="Feedback Widget working" src="./.github/feedback-widget-opening.gif" /></div>
 
-### Utilities
+## :pushpin: About
 
-This turborepo has some additional tools already setup for you:
+This project was developed together with [Rocketseat](https://github.com/Rocketseat), [Diego Fernandes](https://github.com/diego3g) and [Rodrigo Gonçalves](https://github.com/rodrigorgtic) in NLW #8 in order to practise web development using Node.js and Prisma to manage databases. The most exciting thing I did during the process was the server side with Express and database stuff with Prisma. I also learned a bit about SOLID principles, unit testing (where I prefer to use Vitest instead of Jest) and external APIs such as Mailtrap to handle email shipping. This little feature will be used as a model to build on other apps.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+> For more information about my dev journey, consider visiting my [LinkedIn](https://linkedin.com/in/gabriel-vs-frasao).
 
-### Build
+## :hammer: Main tools and libs used
 
-To build all apps and packages, run the following command:
+<details>
+<summary>
+Base tools
+</summary>
 
+- [Vite](https://vitejs.dev/)
+- [React](https://reactjs.org/)
+- [React Native](https://reactnative.dev/)
+- [Node.js](https://nodejs.org/en/)
+- [Express](http://expressjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+
+</details>
+
+<details>
+<summary>
+Styling
+</summary>
+
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Phosphor Icons](https://phosphoricons.com/)
+
+</details>
+
+<details>
+<summary>
+Linters and Formatters
+</summary>
+
+- [Prettier](https://prettier.io/)
+- [.editorConfig](https://editorconfig.org/)
+
+</details>
+
+## :sparkles: Features
+
+- [x] Send and receive feedbacks
+- [x] Save feedbacks data on any database
+- [x] Automatic email sending on new feedback
+
+## :rocket: Running this project
+
+**Clone on your machine** (I personally use Github CLI)
+
+```bash
+# by git
+git clone https://github.com/SlyCooper-n/onlyfeedbacks.git
+
+# or by Github CLI
+gh repo clone SlyCooper-n/onlyfeedbacks
 ```
-cd my-turborepo
-npm run build
-```
 
-### Develop
+**Set every thing up**
 
-To develop all apps and packages, run the following command:
+```bash
+# enter the project folder
+cd onlyfeedbacks
 
-```
-cd my-turborepo
+# install dependencies
+npm install
+
+# run on development mode
 npm run dev
 ```
 
-### Remote Caching
+## :brain: Thinking of contributing to the project?
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Clone the repo as shown above :arrow_up: and follow [this little guide](https://github.com/SlyCooper-n/onlyfeedbacks/blob/main/.github/CONTRIBUTING.md)
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+## :desktop_computer: Deploy
 
-```
-cd my-turborepo
-npx turbo login
-```
+The `server/` directory was deployed on [Railway](https://railway.app/) with this domain name: <https://onlyfeedbacks-production.up.railway.app/>
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Routes
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
+Its only route at the moment is:
 
-```
-npx turbo link
-```
+- /feedbacks (POST)
 
-## Useful Links
+  - ```ts
+    // feedbacks route accepts this content on the body request
+    {
+      type: "BUG" | "IDEA" | "OTHER",
+      comment: string,
+      screenshot?: string, // screenshot format should be: "data:image/png;base64," + <base64_image>
+    }
+    ```
 
-Learn more about the power of Turborepo:
+## :memo: License
 
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+[MIT License](https://github.com/SlyCooper-n/onlyfeedbacks/blob/main/LICENSE) &copy; [Gabriel VS Frasão](https://github.com/SlyCooper-n)
