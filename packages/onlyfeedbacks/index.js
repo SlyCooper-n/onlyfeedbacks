@@ -1,3 +1,1 @@
-import { WidgetBtn } from "./src/components/modules/WidgetBtn";
-
-export { WidgetBtn };
+export { WidgetBtn } from "./src/components/modules/WidgetBtn";
