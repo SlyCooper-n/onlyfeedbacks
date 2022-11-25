@@ -1,6 +1,7 @@
 {
   "name": "onlyfeedbacks-server",
   "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
