@@ -4,20 +4,20 @@ import { routes } from "./routes";
 
 const app: Express = express();
 
-const port = process.env.PORT || 3333;
+const PORT = process.env.PORT || 3333;
 
-// middleware
+// middlewares
 app.use(cors({}));
 app.use(express.json());
 app.use(routes);
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(
-    `\nServer started on port ${port}
+    `\nServer started on port ${PORT}
     Open in the browser: ${
       process.env.NODE_ENV === "development"
-        ? "http://localhost:" + port
-        : "https://feedback-widget-nlw08-production.up.railway.app/"
+        ? `http://localhost:${PORT}`
+        : "https://onlyfeedbacks-production.up.railway.app/"
     }\n`
   );
 });
