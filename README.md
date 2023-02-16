@@ -94,10 +94,6 @@ npm run dev
 
 Clone the repo as shown above :arrow_up: and follow [this little guide](https://github.com/SlyCooper-n/onlyfeedbacks/blob/main/.github/CONTRIBUTING.md)
 
-## :desktop_computer: Deploy
-
-The `server/` directory was deployed on [Railway](https://railway.app/) with this domain name: <https://onlyfeedbacks-production.up.railway.app/>
-
 ### Routes
 
 Its only route at the moment is:
