@@ -1,11 +1,6 @@
 {
   "name": "onlyfeedbacks",
-  "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -13,18 +8,15 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {
-    "@changesets/cli": "^2.25.2"
+    "@changesets/cli": "^2.26.1"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
-    "eslint-config-custom": "*",
+    "eslint-config-custom": "workspace:*",
     "prettier": "latest",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "turbo": "latest"
   },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "packageManager": "npm@8.19.2",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
