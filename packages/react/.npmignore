@@ -1,0 +1,6 @@
+node_modules/
+.turbo/
+src/
+tailwind.config.cjs
+tsconfig.json
+tsup.config.ts
