@@ -1,3 +1,3 @@
 "use client";
 
-export { WidgetBtn } from "./components/modules/WidgetBtn";
+export * from "./components/layouts/Widget";

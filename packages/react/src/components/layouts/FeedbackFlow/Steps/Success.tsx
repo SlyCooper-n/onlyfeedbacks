@@ -1,19 +1,17 @@
-import { CloseBtn } from "../../../widgets/CloseBtn";
+import { CloseBtn } from "@/components/modules";
 
-interface FeedbackSuccessStepProps {
+interface SuccessStepProps {
   restartFeedback: () => void;
 }
 
-export const FeedbackSuccessStep = ({
-  restartFeedback,
-}: FeedbackSuccessStepProps) => {
+export const Success = ({ restartFeedback }: SuccessStepProps) => {
   return (
     <>
       <header>
         <CloseBtn />
       </header>
 
-      <div className="w-full md:min-w-[304px] py-10 flex flex-col items-center">
+      <div className="flex flex-col items-center py-10">
         <svg
           width="41"
           height="40"
@@ -38,7 +36,7 @@ export const FeedbackSuccessStep = ({
         <button
           type="button"
           onClick={restartFeedback}
-          className="mt-6 px-6 py-2 bg-zinc-800 text-sm leading-6 hover:bg-zinc-700 border-transparent transition-colors rounded-[4px] outline-none focus:ring-2 focus:ring-brand-500 ring-offset-2 ring-offset-zinc-900"
+          className="focus:ring-brand-500 mt-6 rounded-[4px] border-transparent bg-zinc-800 px-6 py-2 text-sm leading-6 outline-none ring-offset-2 ring-offset-zinc-900 transition-colors hover:bg-zinc-700 focus:ring-2"
         >
           I want to send another
         </button>

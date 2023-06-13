@@ -1,4 +1,4 @@
-const { violet } = require("tailwindcss/colors");
+const { violet, zinc } = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,6 +7,13 @@ module.exports = {
     extend: {
       colors: {
         brand: violet,
+
+        base: {
+          100: zinc[700],
+          200: zinc[800],
+          300: zinc[900],
+          content: zinc[50],
+        },
       },
     },
   },
