@@ -1,9 +1,10 @@
 import { ArrowLeft } from "phosphor-react";
 import { useState, type FormEvent } from "react";
 
-import { CloseBtn, Loading, ScreenshotButton } from "@/components/modules";
+import type { FeedbackData } from "@/@types";
+import { Loading, ScreenshotButton } from "@/components/modules";
 import type { Feedback } from "@/context";
-import type { FeedbackData } from "..";
+import { useWidgetContext } from "@/hooks";
 
 interface ContentStepProps {
   feedback: Feedback;
@@ -16,8 +17,9 @@ export const Content = ({
   returnBack,
   sendFeedback,
 }: ContentStepProps) => {
-  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const { identifier } = useWidgetContext();
   const [comment, setComment] = useState("");
+  const [screenshot, setScreenshot] = useState<string | null>(null);
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
   function handleFeedbackSubmit(e: FormEvent) {
@@ -31,6 +33,7 @@ export const Content = ({
 
     setComment("");
     sendFeedback({
+      identifier,
       type: feedback.type,
       comment,
       screenshot,
@@ -56,8 +59,6 @@ export const Content = ({
           />
           {feedback.title}
         </span>
-
-        <CloseBtn />
       </header>
 
       <form onSubmit={handleFeedbackSubmit} className="my-8 w-full">
