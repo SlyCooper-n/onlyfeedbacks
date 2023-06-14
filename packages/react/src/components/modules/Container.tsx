@@ -13,7 +13,7 @@ export const Container = ({ asChild, ...props }: ContainerProps) => {
     <Comp
       {...props}
       className={c(
-        "bg-base-200 relative z-10 flex w-[calc(100vw-2rem)] flex-col items-center rounded-2xl p-4 shadow-lg md:w-auto md:min-w-[304px]",
+        "bg-base-200 relative flex w-[calc(100vw-2rem)] flex-col items-center rounded-2xl p-4 shadow-lg md:w-auto md:min-w-[256px]",
         props.className,
       )}
     />
