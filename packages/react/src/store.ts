@@ -15,5 +15,5 @@ export const useWidgetToggler = () => {
 export const widgetFlowAtom = atom<string | null>(null);
 export const useWidgetFlow = () => useAtom(widgetFlowAtom);
 
-export const disableForSessionAtom = atom(false);
-export const useDisableForSession = () => useAtom(disableForSessionAtom);
+export const hideWidgetAtom = atom(false);
+export const useHideWidget = () => useAtom(hideWidgetAtom);
