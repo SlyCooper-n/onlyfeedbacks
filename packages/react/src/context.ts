@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, ReactNode } from "react";
 
 export type Feedback = {
   type: string;
@@ -10,9 +10,16 @@ export type Feedback = {
   inputPlaceholder: string;
 };
 
+export type Action = {
+  flow: string;
+  label: string;
+  component: ReactNode;
+};
+
 export interface WidgetContextValue {
   feedbacks: Feedback[];
   serverEndpoint: string;
+  actions: Action[];
   // colors?: {
   //   primary: string;
   //   content: string;
@@ -22,8 +29,13 @@ export interface WidgetContextValue {
   //     300: string;
   //   };
   // };
-  widgetId?: string;
-  noBranding?: boolean;
+  identifier: string;
+  enableHide: boolean;
+  hideShortcut: {
+    key: string;
+    modifierKey: "ctrlKey" | "shiftKey" | "altKey" | "none";
+  };
+  noBranding: boolean;
 }
 
 export const WidgetContext = createContext({} as WidgetContextValue);

@@ -1,40 +1,42 @@
 import * as Popover from "@radix-ui/react-popover";
 import * as Separator from "@radix-ui/react-separator";
 import { Slot } from "@radix-ui/react-slot";
-import { useAtom } from "jotai";
-import { CaretRight, ChatTeardropDots, ToggleRight, X } from "phosphor-react";
-import type { AnchorHTMLAttributes, PropsWithChildren } from "react";
+import { ArrowUpRight, ChatTeardropDots, X } from "phosphor-react";
+import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import c from "tm-cl";
 
-import { Show } from "@/components/config";
-import { Branding, Container } from "@/components/modules";
+import { For, Show } from "@/components/config";
+import { Action, Branding, Container, HideButton } from "@/components/modules";
 import { WidgetContext, type WidgetContextValue } from "@/context";
-import { useWidgetContext } from "@/hooks";
-import {
-  isWidgetOpenAtom,
-  useDisableForSession,
-  useWidgetFlow,
-  useWidgetToggler,
-} from "@/store";
-import { FeedbackFlow } from "./FeedbackFlow";
+import { useWidgetContext, useWidgetRoot } from "@/hooks";
+import { useWidgetFlow, useWidgetToggler } from "@/store";
 
-export interface WidgetProps extends WidgetContextValue, PropsWithChildren {}
+export interface WidgetProps
+  extends Partial<WidgetContextValue>,
+    PropsWithChildren {
+  feedbacks: WidgetContextValue["feedbacks"];
+  serverEndpoint: WidgetContextValue["serverEndpoint"];
+}
 
 export const Root = ({ children, ...contextValue }: WidgetProps) => {
-  const [isWidgetOpen, setIsWidgetOpen] = useAtom(isWidgetOpenAtom);
-  const [disableForSession] = useDisableForSession();
-
-  const contextValueWithDefaults: WidgetContextValue = {
-    ...contextValue,
-    noBranding: contextValue.noBranding ?? false,
-  };
+  const {
+    isWidgetOpen,
+    setIsWidgetOpen,
+    setWidgetFlow,
+    hideWidget,
+    contextValueWithDefaults,
+  } = useWidgetRoot(contextValue);
 
   return (
     <WidgetContext.Provider value={contextValueWithDefaults}>
       <Popover.Root
         open={isWidgetOpen}
-        onOpenChange={setIsWidgetOpen}
-        children={disableForSession ? null : children}
+        onOpenChange={(open) => {
+          setIsWidgetOpen(open);
+
+          if (open) setWidgetFlow(null);
+        }}
+        children={hideWidget ? null : children}
       />
     </WidgetContext.Provider>
   );
@@ -61,32 +63,56 @@ export const Button = () => {
 export interface WidgetContentProps extends PropsWithChildren {}
 
 export const Content = ({ children }: WidgetContentProps) => {
-  const { noBranding } = useWidgetContext();
-  const [widgetFlow, setWidgetFlow] = useWidgetFlow();
+  const { actions, enableHide, hideShortcut, noBranding } = useWidgetContext();
+  const [widgetFlow] = useWidgetFlow();
 
   const showWidgetHome = widgetFlow === null;
-  const showFeedbackFlow = widgetFlow === "feedback";
 
   return (
     <Popover.Portal>
       <Popover.Content
         align="end"
         sideOffset={12}
-        onInteractOutside={() => setWidgetFlow(null)}
-        onCloseAutoFocus={() => setWidgetFlow(null)}
         className="text-base-content font-medium"
       >
         <Show when={showWidgetHome}>
-          <Container>
-            <Action flow="feedback">Send a feedback</Action>
+          <Container className="pt-2">
+            <Show when={Boolean(children)}>
+              <Divider label="Actions" />
+            </Show>
 
-            {children}
+            <For each={actions}>
+              {(action) => (
+                <Action key={action.flow} flow={action.flow}>
+                  {action.label}
+                </Action>
+              )}
+            </For>
+
+            <Show when={enableHide}>
+              <HideButton
+                shortcut={{
+                  key: hideShortcut.key,
+                  modifierKey: hideShortcut.modifierKey,
+                }}
+              />
+            </Show>
+
+            <Show when={Boolean(children)}>
+              <Divider label="Links" />
+
+              {children}
+            </Show>
           </Container>
         </Show>
 
-        <Show when={showFeedbackFlow}>
-          <FeedbackFlow />
-        </Show>
+        <For each={actions}>
+          {(action) => (
+            <Show key={action.flow} when={action.flow === widgetFlow}>
+              {action.component}
+            </Show>
+          )}
+        </For>
 
         <Show when={!noBranding}>
           <Branding />
@@ -96,29 +122,8 @@ export const Content = ({ children }: WidgetContentProps) => {
   );
 };
 
-interface WidgetActionProps extends PropsWithChildren {
-  flow: string;
-  className?: string;
-}
-
-export const Action = (props: WidgetActionProps) => {
-  const [, setWidgetFlow] = useWidgetFlow();
-
-  return (
-    <button
-      onClick={() => setWidgetFlow(props.flow)}
-      className={c(
-        "hover:bg-base-100 flex w-full items-center justify-between rounded p-0.5 transition-colors",
-        props.className,
-      )}
-    >
-      {props.children}
-      <CaretRight weight="bold" />
-    </button>
-  );
-};
-
-interface WidgetLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface WidgetLinkProps
+  extends AnchorHTMLAttributes<HTMLAnchorElement> {
   asChild?: boolean;
 }
 
@@ -129,27 +134,27 @@ export const Link = ({ asChild, ...props }: WidgetLinkProps) => {
     <Comp
       {...props}
       className={c(
-        "hover:bg-base-100 self-start rounded p-0.5 transition-colors",
-        props.children,
+        "flex items-center gap-2 self-start rounded p-0.5 underline-offset-2 transition-colors hover:underline",
+        props.className,
       )}
-    />
-  );
-};
-
-export const Divider = () => (
-  <Separator.Root className="bg-base-100 my-2 h-px w-full" />
-);
-
-export const DisableButton = () => {
-  const [, setDisableForSession] = useDisableForSession();
-
-  return (
-    <button
-      onClick={() => setDisableForSession(true)}
-      className="hover:bg-base-100 flex w-full items-center justify-between rounded p-0.5 transition-colors"
     >
-      Disable for session
-      <ToggleRight weight="bold" />
-    </button>
+      {props.children}
+
+      <ArrowUpRight />
+    </Comp>
   );
 };
+
+export interface DividerProps {
+  label?: string;
+}
+
+export const Divider = (props: DividerProps) => (
+  <div className="my-2 flex w-full items-center gap-1">
+    <span className="text-sm text-neutral-500">
+      {props.label ? props.label : null}
+    </span>
+
+    <Separator.Root className="bg-base-100 h-px flex-1" />
+  </div>
+);
