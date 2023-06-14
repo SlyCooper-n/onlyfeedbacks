@@ -1,15 +1,10 @@
 import { useState } from "react";
 
+import type { FeedbackData } from "@/@types";
 import { Show } from "@/components/config";
-import { Container } from "@/components/modules";
+import { Container, ResetFlowButton } from "@/components/modules";
 import { useWidgetContext } from "@/hooks";
 import { ChooseType, Content, Success } from "./Steps";
-
-export interface FeedbackData {
-  type: string;
-  comment: string;
-  screenshot?: string | null;
-}
 
 export const FeedbackFlow = () => {
   const { feedbacks, serverEndpoint } = useWidgetContext();
@@ -38,6 +33,8 @@ export const FeedbackFlow = () => {
 
   return (
     <Container>
+      <ResetFlowButton />
+
       <Show when={showTypeStep}>
         <ChooseType setFeedbackType={setFeedbackType} />
       </Show>

@@ -1,9 +1,9 @@
-import { CloseBtn } from "@/components/modules";
+import type { WidgetContextValue } from "@/context";
 import { useWidgetContext } from "@/hooks";
 
-type ChooseTypeStepProps = {
-  setFeedbackType: (type: string | null) => void;
-};
+interface ChooseTypeStepProps {
+  setFeedbackType: (type: WidgetContextValue["feedbacks"][0]["type"]) => void;
+}
 
 export const ChooseType = ({ setFeedbackType }: ChooseTypeStepProps) => {
   const { feedbacks } = useWidgetContext();
@@ -12,8 +12,6 @@ export const ChooseType = ({ setFeedbackType }: ChooseTypeStepProps) => {
     <>
       <header>
         <span className="text-xl leading-6">Give your feedback</span>
-
-        <CloseBtn />
       </header>
 
       <div className="flex w-full max-w-[400px] flex-wrap gap-2 py-8">
