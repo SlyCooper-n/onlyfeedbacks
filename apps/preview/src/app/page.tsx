@@ -1,5 +1,5 @@
-import * as Widget from "@onlys/feedbacks"
-import "@onlys/feedbacks/dist/base.css"
+import * as Widget from "@onlys/feedbacks";
+import "@onlys/feedbacks/dist/base.css";
 
 export default function Home() {
   return (
@@ -11,25 +11,25 @@ export default function Home() {
             title: "Aitoma",
             image: {
               src: "/next.svg",
-              alt: "Next.js"
+              alt: "Next.js",
             },
             inputPlaceholder: "What's your name?",
           },
           {
-              type: "xablau",
-              title: "Xablau",
-              image: {
-                src: "/vercel.svg",
-                alt: "Vercel"
-              },
-              inputPlaceholder: "What's your name?",
+            type: "xablau",
+            title: "Xablau",
+            image: {
+              src: "/vercel.svg",
+              alt: "Vercel",
+            },
+            inputPlaceholder: "What's your name?",
           },
           {
             type: "esqueça",
             title: "Esqueça",
             image: {
               src: "/next.svg",
-              alt: "Next.js"
+              alt: "Next.js",
             },
             inputPlaceholder: "What's your name?",
           },
@@ -38,7 +38,7 @@ export default function Home() {
             title: "Xablau dnv",
             image: {
               src: "/vercel.svg",
-              alt: "Vercel"
+              alt: "Vercel",
             },
             inputPlaceholder: "What's your name?",
           },
@@ -47,7 +47,7 @@ export default function Home() {
             title: "Ai caliquinha",
             image: {
               src: "/next.svg",
-              alt: "Next.js"
+              alt: "Next.js",
             },
             inputPlaceholder: "What's your name?",
           },
@@ -57,16 +57,18 @@ export default function Home() {
           {
             flow: "aham",
             label: "Aham",
-            component: <div>AHAAAAAMM</div>
-          }
+            component: <div>AHAAAAAMM</div>,
+          },
         ]}
       >
         <Widget.Content>
-          <Widget.Link href="https://github.com/gabe-frasz" target="_blank">aitoma</Widget.Link>
+          <Widget.Link href="https://github.com/gabe-frasz" target="_blank">
+            aitoma
+          </Widget.Link>
         </Widget.Content>
 
         <Widget.Button />
       </Widget.Root>
     </div>
-  )
+  );
 }
