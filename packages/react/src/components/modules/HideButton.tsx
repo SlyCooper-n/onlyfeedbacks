@@ -1,5 +1,8 @@
+import { useAtom } from "jotai";
+
 import { WidgetContextValue } from "@/context";
-import { useHideWidget } from "@/store";
+import { useWidgetContext } from "@/hooks";
+import { hideWidgetAtom } from "@/store";
 import { Show } from "../config";
 
 const modifierKeys: Record<
@@ -12,28 +15,22 @@ const modifierKeys: Record<
   none: "",
 };
 
-interface HideButtonProps {
-  shortcut: {
-    key: string;
-    modifierKey: WidgetContextValue["hideShortcut"]["modifierKey"];
-  };
-}
-
-export const HideButton = (props: HideButtonProps) => {
-  const [, setHideWidget] = useHideWidget();
+export const HideButton = () => {
+  const { hideShortcut } = useWidgetContext();
+  const [, setHideWidget] = useAtom(hideWidgetAtom);
 
   return (
     <button
       onClick={() => setHideWidget(true)}
-      className="hover:bg-base-100 flex w-full items-center justify-between rounded p-0.5 transition-colors"
+      className="hover:bg-of-base-100 flex w-full items-center justify-between rounded p-0.5 transition-colors"
     >
       Show/Hide widget
-      <span className="bg-base-300 border-base-100 rounded border p-0.5 text-sm">
-        <Show when={Boolean(props.shortcut.modifierKey)}>
-          {modifierKeys[props.shortcut.modifierKey]} +{" "}
+      <span className="bg-of-base-300 border-of-base-100 rounded border p-0.5 text-xs">
+        <Show when={hideShortcut.modifierKey !== "none"}>
+          {modifierKeys[hideShortcut.modifierKey]} +{" "}
         </Show>
 
-        {props.shortcut.key}
+        {hideShortcut.key}
       </span>
     </button>
   );

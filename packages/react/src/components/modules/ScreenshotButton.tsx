@@ -30,7 +30,7 @@ export const ScreenshotButton = ({
       <button
         type="button"
         onClick={() => onScreenshotTake(null)}
-        className="focus:ring-brand-500 ring-offset-base-200 z-20 flex h-10 w-10 items-end justify-end overflow-hidden rounded-[4px] border-transparent p-1 text-zinc-400 outline-none ring-offset-2 transition-all hover:scale-[2] hover:text-zinc-100 focus:scale-[2] focus:ring-2 lg:hover:scale-[2.75] lg:focus:scale-[2.75]"
+        className="focus:ring-of-brand-500 ring-offset-of-base-200 z-20 flex h-10 w-10 items-end justify-end overflow-hidden rounded-[4px] border-transparent p-1 text-zinc-400 outline-none ring-offset-2 transition-all hover:scale-[2] hover:text-zinc-100 focus:scale-[2] focus:ring-2 lg:hover:scale-[2.75] lg:focus:scale-[2.75]"
         style={{
           backgroundImage: `url(${screenshot})`,
           backgroundSize: "cover",
@@ -45,7 +45,7 @@ export const ScreenshotButton = ({
     <button
       type="button"
       onClick={handleTakeScreenshot}
-      className="focus:ring-brand-500 ring-offset-base-200 bg-base-100 rounded-[4px] border-transparent p-2 outline-none ring-offset-2 transition-colors hover:bg-zinc-700 focus:ring-2"
+      className="focus:ring-of-brand-500 ring-offset-of-base-200 bg-of-base-100 rounded-[4px] border-transparent p-2 outline-none ring-offset-2 transition-colors hover:bg-zinc-700 focus:ring-2"
     >
       {isTakingScreenshot ? <Loading /> : <Camera className="h-6 w-6" />}
     </button>

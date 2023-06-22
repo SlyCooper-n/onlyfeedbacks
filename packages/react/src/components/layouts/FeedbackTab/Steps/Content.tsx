@@ -3,8 +3,7 @@ import { useState, type FormEvent } from "react";
 
 import type { FeedbackData } from "@/@types";
 import { Loading, ScreenshotButton } from "@/components/modules";
-import type { Feedback } from "@/context";
-import { useWidgetContext } from "@/hooks";
+import type { Feedback } from "../FeedbackTab";
 
 interface ContentStepProps {
   feedback: Feedback;
@@ -17,12 +16,11 @@ export const Content = ({
   returnBack,
   sendFeedback,
 }: ContentStepProps) => {
-  const { identifier } = useWidgetContext();
   const [comment, setComment] = useState("");
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  function handleFeedbackSubmit(e: FormEvent) {
+  async function handleFeedbackSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (comment.trim() === "") {
@@ -32,17 +30,19 @@ export const Content = ({
     setIsSendingFeedback(true);
 
     setComment("");
-    sendFeedback({
-      identifier,
+    await sendFeedback({
+      identifier: window.origin,
       type: feedback.type,
       comment,
       screenshot,
     });
+
+    setIsSendingFeedback(false);
   }
 
   return (
     <>
-      <header>
+      <header className="flex justify-center">
         <button
           type="button"
           onClick={returnBack}
@@ -67,7 +67,7 @@ export const Content = ({
           placeholder={feedback.inputPlaceholder}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="focus:border-brand-500 scrollbar-thumb-zinc-700 scrollbar-transparent scrollbar-thin border-base-100 bg-base-300 min-h-[112px] w-full resize-none rounded-md border p-1 text-sm placeholder-zinc-400 outline-none transition-colors md:min-w-[304px]"
+          className="focus:border-of-brand-500 scrollbar-thumb-zinc-700 scrollbar-transparent scrollbar-thin border-of-base-100 bg-of-base-300 min-h-[112px] w-full resize-none rounded-md border p-1 text-sm placeholder-zinc-400 outline-none transition-colors md:min-w-[304px]"
         />
 
         <footer className="mt-2 flex gap-2">
@@ -79,7 +79,7 @@ export const Content = ({
           <button
             type="submit"
             disabled={comment.trim() === "" || isSendingFeedback}
-            className="bg-brand-500 hover:bg-brand-300 focus:ring-brand-500 disabled:hover:bg-brand-500 ring-offset-base-200 flex flex-1 items-center justify-center rounded-[4px] border-transparent p-2 text-sm outline-none ring-offset-2 transition-colors focus:ring-2 disabled:opacity-50"
+            className="bg-of-brand-500 hover:bg-of-brand-300 focus:ring-of-brand-500 disabled:hover:bg-of-brand-500 ring-offset-of-base-200 flex flex-1 items-center justify-center rounded-[4px] border-transparent p-2 text-sm outline-none ring-offset-2 transition-colors focus:ring-2 disabled:opacity-50"
           >
             {isSendingFeedback ? <Loading /> : "Send feedback"}
           </button>

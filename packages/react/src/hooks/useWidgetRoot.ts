@@ -1,25 +1,21 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-import { FeedbackFlow } from "@/components/layouts";
 import { WidgetContextValue } from "@/context";
-import { isWidgetOpenAtom, useHideWidget, useWidgetFlow } from "@/store";
+import { activeTabAtom, hideWidgetAtom, isWidgetOpenAtom } from "@/store";
 
-interface ContextValue extends Partial<WidgetContextValue> {
-  feedbacks: WidgetContextValue["feedbacks"];
-  serverEndpoint: WidgetContextValue["serverEndpoint"];
-}
+interface ContextValue extends Partial<WidgetContextValue> {}
 
 export const useWidgetRoot = (contextValue: ContextValue) => {
   const [isWidgetOpen, setIsWidgetOpen] = useAtom(isWidgetOpenAtom);
-  const [hideWidget, setHideWidget] = useHideWidget();
-  const [, setWidgetFlow] = useWidgetFlow();
+  const [hideWidget, setHideWidget] = useAtom(hideWidgetAtom);
+  const [, setActiveTab] = useAtom(activeTabAtom);
 
   const enableHide = contextValue.enableHide ?? true;
   const modifierKey = contextValue.hideShortcut?.modifierKey ?? "altKey";
   const key = contextValue.hideShortcut?.key ?? "i";
 
-  useEffect(() => {
+  function registerHideShortcut() {
     if (enableHide) {
       window.addEventListener("keyup", (e) => {
         if ((modifierKey === "none" || e[modifierKey]) && e.key === key) {
@@ -30,24 +26,17 @@ export const useWidgetRoot = (contextValue: ContextValue) => {
     }
 
     return () => window.removeEventListener("keyup", () => {});
+  }
+
+  useEffect(() => {
+    const unregister = registerHideShortcut();
+
+    return unregister;
   }, []);
 
   const contextValueWithDefaults: WidgetContextValue = {
-    ...contextValue,
-    actions: [
-      {
-        flow: "feedback",
-        label: "Send a feedback",
-        component: <FeedbackFlow />,
-      },
-      ...(contextValue.actions ?? []),
-    ],
-    identifier: contextValue.identifier ?? window.origin,
     enableHide,
-    hideShortcut: {
-      key,
-      modifierKey,
-    },
+    hideShortcut: { key, modifierKey },
     noBranding: contextValue.noBranding ?? false,
   };
 
@@ -56,6 +45,6 @@ export const useWidgetRoot = (contextValue: ContextValue) => {
     setIsWidgetOpen,
     hideWidget,
     contextValueWithDefaults,
-    setWidgetFlow,
+    setActiveTab,
   };
 };

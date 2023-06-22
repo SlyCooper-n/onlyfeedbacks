@@ -1,28 +1,26 @@
 import * as Popover from "@radix-ui/react-popover";
-import * as Separator from "@radix-ui/react-separator";
 import { Slot } from "@radix-ui/react-slot";
-import { ArrowUpRight, ChatTeardropDots, X } from "phosphor-react";
+import * as Tabs from "@radix-ui/react-tabs";
+import { useAtom, useAtomValue } from "jotai";
+import { CaretRight } from "phosphor-react";
 import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import c from "tm-cl";
 
-import { For, Show } from "@/components/config";
-import { Action, Branding, Container, HideButton } from "@/components/modules";
+import { Show } from "@/components/config";
+import { Branding } from "@/components/modules";
 import { WidgetContext, type WidgetContextValue } from "@/context";
 import { useWidgetContext, useWidgetRoot } from "@/hooks";
-import { useWidgetFlow, useWidgetToggler } from "@/store";
+import { activeTabAtom } from "@/store";
 
 export interface WidgetProps
   extends Partial<WidgetContextValue>,
-    PropsWithChildren {
-  feedbacks: WidgetContextValue["feedbacks"];
-  serverEndpoint: WidgetContextValue["serverEndpoint"];
-}
+    PropsWithChildren {}
 
 export const Root = ({ children, ...contextValue }: WidgetProps) => {
   const {
     isWidgetOpen,
     setIsWidgetOpen,
-    setWidgetFlow,
+    setActiveTab,
     hideWidget,
     contextValueWithDefaults,
   } = useWidgetRoot(contextValue);
@@ -34,7 +32,7 @@ export const Root = ({ children, ...contextValue }: WidgetProps) => {
         onOpenChange={(open) => {
           setIsWidgetOpen(open);
 
-          if (open) setWidgetFlow(null);
+          if (open) setActiveTab("");
         }}
         children={hideWidget ? null : children}
       />
@@ -42,77 +40,49 @@ export const Root = ({ children, ...contextValue }: WidgetProps) => {
   );
 };
 
-export const Button = () => {
-  const { isOpen } = useWidgetToggler();
+export interface WidgetButtonProps extends PropsWithChildren {
+  className?: string;
+}
 
-  const Icon = isOpen ? X : ChatTeardropDots;
-  const widgetLabel = isOpen ? "Close" : "Feedback";
-
+export const Button = (props: WidgetButtonProps) => {
   return (
-    <Popover.Trigger className="bg-brand-500 group absolute bottom-5 right-5 flex h-12 items-center overflow-hidden rounded-full px-3 text-white md:bottom-8 md:right-8">
-      <Icon weight="bold" className="h-6 w-6" />
-
-      <span className="max-w-0 font-semibold transition-all duration-500 ease-linear group-hover:max-w-xs group-focus-visible:max-w-xs">
-        <span className="pl-3" />
-        {widgetLabel}
-      </span>
+    <Popover.Trigger
+      className={c(
+        `bg-of-brand-500 group absolute bottom-5 right-5 h-12 rounded-full px-3 text-white md:bottom-8 md:right-8`,
+        props.className,
+      )}
+    >
+      {props.children}
     </Popover.Trigger>
   );
 };
 
-export interface WidgetContentProps extends PropsWithChildren {}
+export interface WidgetContentProps
+  extends Pick<Popover.PopoverContentProps, "align" | "sideOffset">,
+    Omit<Tabs.TabsProps, "value" | "onValueChange" | "activationMode"> {}
 
-export const Content = ({ children }: WidgetContentProps) => {
-  const { actions, enableHide, hideShortcut, noBranding } = useWidgetContext();
-  const [widgetFlow] = useWidgetFlow();
-
-  const showWidgetHome = widgetFlow === null;
+export const Content = (props: WidgetContentProps) => {
+  const { noBranding } = useWidgetContext();
+  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
 
   return (
     <Popover.Portal>
       <Popover.Content
-        align="end"
-        sideOffset={12}
-        className="text-base-content font-medium"
+        align={props.align ?? "end"}
+        sideOffset={props.sideOffset ?? 12}
       >
-        <Show when={showWidgetHome}>
-          <Container className="pt-2">
-            <Show when={Boolean(children)}>
-              <Divider label="Actions" />
-            </Show>
-
-            <For each={actions}>
-              {(action) => (
-                <Action key={action.flow} flow={action.flow}>
-                  {action.label}
-                </Action>
-              )}
-            </For>
-
-            <Show when={enableHide}>
-              <HideButton
-                shortcut={{
-                  key: hideShortcut.key,
-                  modifierKey: hideShortcut.modifierKey,
-                }}
-              />
-            </Show>
-
-            <Show when={Boolean(children)}>
-              <Divider label="Links" />
-
-              {children}
-            </Show>
-          </Container>
-        </Show>
-
-        <For each={actions}>
-          {(action) => (
-            <Show key={action.flow} when={action.flow === widgetFlow}>
-              {action.component}
-            </Show>
+        <Tabs.Root
+          {...props}
+          value={activeTab}
+          onValueChange={setActiveTab}
+          activationMode="manual"
+          className={c(
+            "bg-of-base-200 text-of-base-content relative z-10 w-[calc(100vw-2rem)] rounded-2xl font-medium shadow-lg md:w-auto md:min-w-[256px]",
+            props.className,
           )}
-        </For>
+        >
+          {props.children}
+        </Tabs.Root>
 
         <Show when={!noBranding}>
           <Branding />
@@ -122,8 +92,56 @@ export const Content = ({ children }: WidgetContentProps) => {
   );
 };
 
+export interface WidgetTabListProps extends Tabs.TabsListProps {}
+
+export const TabList = (props: WidgetTabListProps) => {
+  const activeTab = useAtomValue(activeTabAtom);
+
+  if (activeTab) return null;
+
+  return (
+    <Tabs.List
+      {...props}
+      className={c(
+        "flex w-full flex-col data-[layout=compact]:text-yellow-500 data-[layout=default]:text-lime-500",
+        props.className,
+      )}
+    />
+  );
+};
+
+export interface WidgetTabContentProps extends Tabs.TabsContentProps {}
+
+export const TabContent = (props: WidgetTabContentProps) => {
+  return <Tabs.Content {...props} className={c("p-4", props.className)} />;
+};
+
+export interface WidgetTabTriggerProps extends Tabs.TabsTriggerProps {
+  rightIconClassName?: string;
+}
+
+export const TabTrigger = (props: WidgetTabTriggerProps) => {
+  return (
+    <Tabs.Trigger
+      {...props}
+      className={c(
+        "hover:bg-of-base-100 flex w-full items-center gap-2 rounded p-0.5 transition-colors",
+        props.className,
+      )}
+    >
+      {props.children}
+
+      <CaretRight
+        weight="bold"
+        className={c("ml-auto", props.rightIconClassName)}
+      />
+    </Tabs.Trigger>
+  );
+};
+
 export interface WidgetLinkProps
   extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  rightIconClassName?: string;
   asChild?: boolean;
 }
 
@@ -134,27 +152,16 @@ export const Link = ({ asChild, ...props }: WidgetLinkProps) => {
     <Comp
       {...props}
       className={c(
-        "flex items-center gap-2 self-start rounded p-0.5 underline-offset-2 transition-colors hover:underline",
+        "hover:bg-of-base-100 flex w-full items-center gap-2 rounded p-0.5 transition-colors",
         props.className,
       )}
     >
       {props.children}
 
-      <ArrowUpRight />
+      <CaretRight
+        weight="bold"
+        className={c("ml-auto", props.rightIconClassName)}
+      />
     </Comp>
   );
 };
-
-export interface DividerProps {
-  label?: string;
-}
-
-export const Divider = (props: DividerProps) => (
-  <div className="my-2 flex w-full items-center gap-1">
-    <span className="text-sm text-neutral-500">
-      {props.label ? props.label : null}
-    </span>
-
-    <Separator.Root className="bg-base-100 h-px flex-1" />
-  </div>
-);

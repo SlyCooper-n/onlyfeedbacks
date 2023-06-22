@@ -1,35 +1,6 @@
-import { createContext, ReactNode } from "react";
-
-export type Feedback = {
-  type: string;
-  title: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  inputPlaceholder: string;
-};
-
-export type Action = {
-  flow: string;
-  label: string;
-  component: ReactNode;
-};
+import { createContext } from "react";
 
 export interface WidgetContextValue {
-  feedbacks: Feedback[];
-  serverEndpoint: string;
-  actions: Action[];
-  // colors?: {
-  //   primary: string;
-  //   content: string;
-  //   base: {
-  //     100: string;
-  //     200: string;
-  //     300: string;
-  //   };
-  // };
-  identifier: string;
   enableHide: boolean;
   hideShortcut: {
     key: string;

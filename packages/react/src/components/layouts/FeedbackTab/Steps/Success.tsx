@@ -29,7 +29,7 @@ export const Success = ({ restartFeedback }: SuccessStepProps) => {
       <button
         type="button"
         onClick={restartFeedback}
-        className="focus:ring-brand-500 mt-6 rounded-[4px] border-transparent bg-zinc-800 px-6 py-2 text-sm leading-6 outline-none ring-offset-2 ring-offset-zinc-900 transition-colors hover:bg-zinc-700 focus:ring-2"
+        className="focus:ring-of-brand-500 mt-6 rounded-[4px] border-transparent bg-zinc-800 px-6 py-2 text-sm leading-6 outline-none ring-offset-2 ring-offset-zinc-900 transition-colors hover:bg-zinc-700 focus:ring-2"
       >
         I want to send another
       </button>

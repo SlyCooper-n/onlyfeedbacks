@@ -2,12 +2,25 @@ import { useState } from "react";
 
 import type { FeedbackData } from "@/@types";
 import { Show } from "@/components/config";
-import { Container, ResetFlowButton } from "@/components/modules";
-import { useWidgetContext } from "@/hooks";
+import { ReturnHomeButton } from "@/components/modules";
 import { ChooseType, Content, Success } from "./Steps";
 
-export const FeedbackFlow = () => {
-  const { feedbacks, serverEndpoint } = useWidgetContext();
+export type Feedback = {
+  type: string;
+  title: string;
+  image: {
+    src: string;
+    alt: string;
+  };
+  inputPlaceholder: string;
+};
+
+interface FeedbackTabProps {
+  feedbacks: Feedback[];
+  serverEndpoint: string;
+}
+
+export const FeedbackTab = (props: FeedbackTabProps) => {
   const [feedbackType, setFeedbackType] = useState<string | null>(null);
   const [feedbackSent, setFeedbackSent] = useState(false);
 
@@ -17,14 +30,16 @@ export const FeedbackFlow = () => {
   }
 
   async function sendFeedback(feedbackData: FeedbackData) {
-    const res = await fetch(serverEndpoint, {
-      method: "POST",
-      body: JSON.stringify(feedbackData),
-    });
+    try {
+      await fetch(props.serverEndpoint, {
+        method: "POST",
+        body: JSON.stringify(feedbackData),
+      });
 
-    if (!res.ok) return alert(res.statusText);
-
-    setFeedbackSent(true);
+      setFeedbackSent(true);
+    } catch (_) {
+      alert("Failed to send feedback. \nPlease try again.");
+    }
   }
 
   const showTypeStep = !feedbackType;
@@ -32,16 +47,19 @@ export const FeedbackFlow = () => {
   const showSuccessStep = feedbackSent;
 
   return (
-    <Container>
-      <ResetFlowButton />
+    <>
+      <ReturnHomeButton />
 
       <Show when={showTypeStep}>
-        <ChooseType setFeedbackType={setFeedbackType} />
+        <ChooseType
+          feedbacks={props.feedbacks}
+          setFeedbackType={setFeedbackType}
+        />
       </Show>
 
       <Show when={showContentStep}>
         <Content
-          feedback={feedbacks.find((f) => f.type === feedbackType)!}
+          feedback={props.feedbacks.find((f) => f.type === feedbackType)!}
           returnBack={returnBack}
           sendFeedback={sendFeedback}
         />
@@ -50,6 +68,6 @@ export const FeedbackFlow = () => {
       <Show when={showSuccessStep}>
         <Success restartFeedback={returnBack} />
       </Show>
-    </Container>
+    </>
   );
 };
