@@ -6,6 +6,6 @@
   "commit": true,
   "fixed": [],
   "linked": [],
-  "ignore": ["eslint-config-custom"],
+  "ignore": ["eslint-config-custom", "preview"],
   "updateInternalDependencies": "patch"
 }
