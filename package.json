@@ -5,14 +5,19 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "pkg.version": "changeset version",
+    "pkg.publish": "turbo build --filter='./packages/*' && changeset publish"
   },
   "dependencies": {
     "@changesets/cli": "^2.26.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
     "cz-conventional-changelog": "^3.3.0",
     "eslint-config-custom": "workspace:*",
+    "husky": "^8.0.3",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "turbo": "latest"
